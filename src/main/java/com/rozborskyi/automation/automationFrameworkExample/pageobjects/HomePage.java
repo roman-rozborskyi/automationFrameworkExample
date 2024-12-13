@@ -1,12 +1,15 @@
 package com.rozborskyi.automation.automationFrameworkExample.pageobjects;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 @Component
-public class HomePage {
+public class HomePage extends BasePage {
+    private static final Logger LOGGER = LogManager.getLogger(HomePage.class);
 
     public HomePage openTutorialsMenu() {
-        System.out.println("open tutorials menu");
+        LOGGER.info("open tutorials menu");
         return this;
     }
 }

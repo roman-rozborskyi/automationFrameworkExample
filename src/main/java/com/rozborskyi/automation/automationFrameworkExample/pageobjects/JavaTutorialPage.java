@@ -1,11 +1,15 @@
 package com.rozborskyi.automation.automationFrameworkExample.pageobjects;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JavaTutorialPage {
+public class JavaTutorialPage extends BasePage {
+    private static final Logger LOGGER = LogManager.getLogger(JavaTutorialPage.class);
+
     public boolean isPageDisplayed() {
-        System.out.println("java tutorial page is displayed");
+        LOGGER.info("java tutorial page is displayed");
         return true;
     }
 }

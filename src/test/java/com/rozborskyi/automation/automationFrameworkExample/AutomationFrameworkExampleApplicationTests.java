@@ -9,7 +9,6 @@ class AutomationFrameworkExampleApplicationTests extends BaseTest {
     void contextLoads() {
         homePageSteps.goToJavaTutorial();
         boolean isPageDisplayed = javaTutorialSteps.isPageDisplayed();
-        Assertions.assertTrue(isPageDisplayed);
+        Assertions.assertTrue(isPageDisplayed, "Page \"Java tutorial\" isn't displayed");
     }
-
 }
