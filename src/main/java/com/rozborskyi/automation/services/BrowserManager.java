@@ -1,4 +1,4 @@
-package com.rozborskyi.automation.automationFrameworkExample.services;
+package com.rozborskyi.automation.services;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

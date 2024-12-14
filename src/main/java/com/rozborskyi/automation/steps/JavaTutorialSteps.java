@@ -1,6 +1,6 @@
-package com.rozborskyi.automation.automationFrameworkExample.steps;
+package com.rozborskyi.automation.steps;
 
-import com.rozborskyi.automation.automationFrameworkExample.pageobjects.JavaTutorialPage;
+import com.rozborskyi.automation.pageobjects.JavaTutorialPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

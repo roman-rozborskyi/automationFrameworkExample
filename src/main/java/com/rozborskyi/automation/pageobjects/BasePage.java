@@ -1,4 +1,4 @@
-package com.rozborskyi.automation.automationFrameworkExample.pageobjects;
+package com.rozborskyi.automation.pageobjects;
 
 import org.openqa.selenium.WebDriver;
 import org.springframework.stereotype.Component;

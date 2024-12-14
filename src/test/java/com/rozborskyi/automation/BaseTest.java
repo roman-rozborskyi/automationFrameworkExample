@@ -1,8 +1,8 @@
-package com.rozborskyi.automation.automationFrameworkExample;
+package com.rozborskyi.automation;
 
-import com.rozborskyi.automation.automationFrameworkExample.services.BrowserManager;
-import com.rozborskyi.automation.automationFrameworkExample.steps.HomePageSteps;
-import com.rozborskyi.automation.automationFrameworkExample.steps.JavaTutorialSteps;
+import com.rozborskyi.automation.services.BrowserManager;
+import com.rozborskyi.automation.steps.HomePageSteps;
+import com.rozborskyi.automation.steps.JavaTutorialSteps;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;

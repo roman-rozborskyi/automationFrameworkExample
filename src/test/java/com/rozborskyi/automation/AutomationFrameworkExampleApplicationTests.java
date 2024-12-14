@@ -1,4 +1,4 @@
-package com.rozborskyi.automation.automationFrameworkExample;
+package com.rozborskyi.automation;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

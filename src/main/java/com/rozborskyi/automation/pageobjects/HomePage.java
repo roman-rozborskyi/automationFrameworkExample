@@ -1,4 +1,4 @@
-package com.rozborskyi.automation.automationFrameworkExample.pageobjects;
+package com.rozborskyi.automation.pageobjects;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

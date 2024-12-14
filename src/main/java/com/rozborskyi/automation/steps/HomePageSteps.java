@@ -1,7 +1,7 @@
-package com.rozborskyi.automation.automationFrameworkExample.steps;
+package com.rozborskyi.automation.steps;
 
-import com.rozborskyi.automation.automationFrameworkExample.pageobjects.HomePage;
-import com.rozborskyi.automation.automationFrameworkExample.pageobjects.TutorialsMenu;
+import com.rozborskyi.automation.pageobjects.HomePage;
+import com.rozborskyi.automation.pageobjects.TutorialsMenu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

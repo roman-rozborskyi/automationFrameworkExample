@@ -1,4 +1,4 @@
-package com.rozborskyi.automation.automationFrameworkExample;
+package com.rozborskyi.automation;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
