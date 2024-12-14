@@ -8,16 +8,9 @@ import org.springframework.stereotype.Component;
 public class DriverManager {
     private final ThreadLocal<WebDriver> webDriverContainer = new ThreadLocal<>();
 
-    public DriverManager() {
-        WebDriver webDriver = getWebDriver();
-        webDriverContainer.set(webDriver);
-    }
-
-    private WebDriver getWebDriver() {
-        return new ChromeDriver();
-    }
-
     public WebDriver getDriver() {
+        WebDriver webDriver = new ChromeDriver();
+        webDriverContainer.set(webDriver);
         return webDriverContainer.get();
     }
 }

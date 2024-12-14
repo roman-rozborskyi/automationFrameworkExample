@@ -3,13 +3,14 @@ package com.rozborskyi.automation;
 import com.rozborskyi.automation.services.BrowserManager;
 import com.rozborskyi.automation.steps.HomePageSteps;
 import com.rozborskyi.automation.steps.JavaTutorialSteps;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 
-@SpringBootTest
-public abstract class BaseTest {
+@SpringBootTest(classes = AutomationFrameworkExampleApplication.class)
+public abstract class BaseTest extends AbstractTestNGSpringContextTests {
     @Autowired
     protected BrowserManager browserManager;
     @Autowired
@@ -17,14 +18,14 @@ public abstract class BaseTest {
     @Autowired
     protected JavaTutorialSteps javaTutorialSteps;
 
-    @BeforeEach
+    @BeforeMethod
     public void startTest() {
         browserManager
                 .startBrowser()
                 .navigateToHomePage();
     }
 
-    @AfterEach
+    @AfterMethod
     public void endTest() {
         browserManager.closeBrowser();
     }
