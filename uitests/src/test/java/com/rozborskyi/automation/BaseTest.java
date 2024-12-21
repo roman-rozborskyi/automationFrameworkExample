@@ -16,7 +16,7 @@ import org.testng.annotations.BeforeTest;
 
 import java.lang.reflect.Method;
 
-@SpringBootTest(classes = AutomationFrameworkExampleApplication.class)
+@SpringBootTest(classes = UiTestsApplication.class)
 public abstract class BaseTest extends AbstractTestNGSpringContextTests {
     private static final Logger LOGGER = LogManager.getLogger(BaseTest.class);
     @Autowired

@@ -1,0 +1,60 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.rozborskyi.automation</groupId>
+        <artifactId>automationFrameworkExample</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>apitests</artifactId>
+    <packaging>jar</packaging>
+
+    <profiles>
+        <profile>
+            <id>api</id>
+            <properties>
+                <test.skip>false</test.skip>
+            </properties>
+        </profile>
+        <profile>
+            <id>ui</id>
+            <properties>
+                <test.skip>true</test.skip>
+            </properties>
+        </profile>
+    </profiles>
+
+    <name>apitests</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>5.5.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.0</version>
+                <!--TODO find correct version of the plugin. Newest version doesn't run tests in the testng.xml-->
+                <configuration>
+                    <skip>${test.skip}</skip>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>${suite}</suiteXmlFile>
+                    </suiteXmlFiles>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

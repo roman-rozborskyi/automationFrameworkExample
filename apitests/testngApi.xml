@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Suite">
+    <test name="First test">
+        <classes>
+            <class name="com.rozborskyi.automation.FirstTest"/>
+        </classes>
+    </test>
+</suite>

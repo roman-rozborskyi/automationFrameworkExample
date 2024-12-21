@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AutomationFrameworkExampleApplication {
+public class UiTestsApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AutomationFrameworkExampleApplication.class, args);
+        SpringApplication.run(UiTestsApplication.class, args);
     }
 
 }

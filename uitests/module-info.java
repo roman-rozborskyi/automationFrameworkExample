@@ -1,0 +1,3 @@
+module uiTests {
+    requires services;
+}

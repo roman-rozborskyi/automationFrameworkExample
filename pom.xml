@@ -11,12 +11,18 @@
     <groupId>com.rozborskyi.automation</groupId>
     <artifactId>automationFrameworkExample</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>automationFrameworkExample</name>
     <description>A demo project to demonstrate an approach to automation test development</description>
     <url/>
     <developers>
         <developer/>
     </developers>
+    <modules>
+        <module>uitests</module>
+        <module>apitests</module>
+        <module>services</module>
+    </modules>
     <scm>
         <connection/>
         <developerConnection/>
@@ -25,7 +31,7 @@
     </scm>
     <properties>
         <java.version>17</java.version>
-        <test.suite>testng.xml</test.suite>
+        <suite>${suiteFileName}.xml</suite>
     </properties>
     <dependencies>
         <dependency>
@@ -54,11 +60,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>4.27.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
@@ -73,7 +74,6 @@
             <artifactId>log4j-core</artifactId>
             <version>2.24.2</version>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -88,17 +88,6 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.0</version>
-                <!--TODO find correct version of the plugin. Newest version doesn't run tests in the testng.xml-->
-                <configuration>
-                    <suiteXmlFiles>
-                        <suiteXmlFile>${test.suite}</suiteXmlFile>
-                    </suiteXmlFiles>
                 </configuration>
             </plugin>
         </plugins>
