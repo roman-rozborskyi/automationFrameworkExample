@@ -33,7 +33,7 @@ public abstract class BaseTest extends AbstractTestNGSpringContextTests {
                 .navigateTo("https://www.javatpoint.com/");
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void afterTestMethod(Method method) {
         browserManager.closeBrowser();
     }
@@ -43,7 +43,7 @@ public abstract class BaseTest extends AbstractTestNGSpringContextTests {
         LOGGER.info("Start test " + iTestListener.getName());
     }
 
-    @AfterTest
+    @AfterTest(alwaysRun = true)
     public void afterTest(ITestContext iTestListener) {
         LOGGER.info("End test " + iTestListener.getName());
     }

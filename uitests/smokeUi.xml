@@ -4,6 +4,7 @@
         <classes>
             <class name="com.rozborskyi.automation.smoke.IsJavaTutorialsPageOpenTest"/>
             <class name="com.rozborskyi.automation.smoke.IsJavaTutorialsPageOpenTest1"/>
+            <class name="com.rozborskyi.automation.smoke.IsJavaTutorialsPageOpenTest2"/>
         </classes>
     </test>
 </suite>
