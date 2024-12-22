@@ -1,3 +1,0 @@
-module uiTests {
-    requires services;
-}
