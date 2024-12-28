@@ -70,7 +70,7 @@ public final class ExtentReportsService implements Reporter {
 
         private Tracking getAnnotationIfPresent(Method method) {
             return Optional.ofNullable(method.getAnnotation(Tracking.class))
-                    .orElseThrow(() -> new RuntimeException(String.format("Add annotation \"Tracking\" to the test %s", getTestDescription(method))));
+                    .orElseThrow(() -> new RuntimeException(String.format("Add \"@Tracking\" to the test %s", getTestDescription(method))));
         }
 
         private void addStory(ExtentTest extentTest, Tracking tracking) {
