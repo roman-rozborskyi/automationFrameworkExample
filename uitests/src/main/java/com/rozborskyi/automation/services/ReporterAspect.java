@@ -2,7 +2,7 @@ package com.rozborskyi.automation.services;
 
 import com.rozborskyi.automation.reporter.ExtentReportsService;
 import com.rozborskyi.automation.reporter.Reporter;
-import com.rozborskyi.automation.reporter.ReporterStep;
+import com.rozborskyi.automation.reporter.Step;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -29,7 +29,7 @@ public class ReporterAspect {
         reporter.addFailStep(description, throwable);
     }
 
-    @Pointcut("@annotation(com.rozborskyi.automation.reporter.ReporterStep) && execution(* *(..))")
+    @Pointcut("@annotation(com.rozborskyi.automation.reporter.Step) && execution(* *(..))")
     public void definePointcut() {
 
     }
@@ -37,7 +37,7 @@ public class ReporterAspect {
     private String getStepDescription(JoinPoint joinPoint) {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
-        ReporterStep annotation = method.getAnnotation(ReporterStep.class);
+        Step annotation = method.getAnnotation(Step.class);
         return annotation.description();
     }
 }

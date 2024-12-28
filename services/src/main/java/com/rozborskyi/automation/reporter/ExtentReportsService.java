@@ -3,12 +3,15 @@ package com.rozborskyi.automation.reporter;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.MediaEntityBuilder;
+import com.aventstack.extentreports.markuputils.ExtentColor;
+import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.aventstack.extentreports.model.Media;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import org.testng.annotations.Test;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 public final class ExtentReportsService implements Reporter {
     private static ExtentReportsService extentReportsService;
@@ -32,6 +35,7 @@ public final class ExtentReportsService implements Reporter {
     public void addTest(Method method) {
         String description = getTestDescription(method);
         ExtentTest extentTest = REPORT.createTest(description);
+        new TrackingProcessor().addInfoToTest(extentTest, method);
         TESTS.set(extentTest);
     }
 
@@ -56,5 +60,25 @@ public final class ExtentReportsService implements Reporter {
     @Override
     public void generateReport() {
         REPORT.flush();
+    }
+
+    private class TrackingProcessor {
+        private void addInfoToTest(ExtentTest extentTest, Method method) {
+            Tracking annotation = getAnnotationIfPresent(method);
+            addStory(extentTest, annotation);
+        }
+
+        private Tracking getAnnotationIfPresent(Method method) {
+            return Optional.ofNullable(method.getAnnotation(Tracking.class))
+                    .orElseThrow(() -> new RuntimeException(String.format("Add annotation \"Tracking\" to the test %s", getTestDescription(method))));
+        }
+
+        private void addStory(ExtentTest extentTest, Tracking tracking) {
+            String story = tracking.story();
+            if (story == null || story.isEmpty()) {
+                story = "Story wasn't defined";
+            }
+            extentTest.info(MarkupHelper.createLabel(story, ExtentColor.BLUE));
+        }
     }
 }

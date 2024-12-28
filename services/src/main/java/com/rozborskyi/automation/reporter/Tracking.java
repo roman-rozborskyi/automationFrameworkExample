@@ -7,6 +7,8 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ReporterStep {
-    String description();
+public @interface Tracking {
+    String story() default "";
+
+    String[] bugs() default "";
 }
