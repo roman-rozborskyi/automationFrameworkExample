@@ -20,4 +20,5 @@ To run test suite from command line must be executed command:\
 ```mvn clean test -P ui -DsuiteFileName=smokeUi```\
 Where "ui" is the type of tests. The value "ui" or "api" is allowed. The "suiteFileName" parameter is the name of the
 test suite without the .xml extension. Both parameters depend on each other. An error will be thrown if the UI test
-suite is run with the "api" option
+suite is run with the "api" option.\
+For reports creation ExtentReports and AspectJ are used 
