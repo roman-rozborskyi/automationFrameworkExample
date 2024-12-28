@@ -1,5 +1,7 @@
 package com.rozborskyi.automation;
 
+import com.rozborskyi.automation.reporter.ExtentReportsService;
+import com.rozborskyi.automation.reporter.Reporter;
 import com.rozborskyi.automation.services.BrowserManager;
 import com.rozborskyi.automation.steps.HomePageSteps;
 import com.rozborskyi.automation.steps.JavaTutorialSteps;
@@ -9,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.ITestContext;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.*;
 
 import java.lang.reflect.Method;
 
@@ -20,21 +19,23 @@ import java.lang.reflect.Method;
 public abstract class BaseTest extends AbstractTestNGSpringContextTests {
     private static final Logger LOGGER = LogManager.getLogger(BaseTest.class);
     @Autowired
-    protected BrowserManager browserManager;
+    private BrowserManager browserManager;
+    protected Reporter reporter = ExtentReportsService.getInstance();
     @Autowired
     protected HomePageSteps homePageSteps;
     @Autowired
     protected JavaTutorialSteps javaTutorialSteps;
 
     @BeforeMethod
-    public void beforeTestMethod() {
+    public void beforeTestMethod(Method method) {
+        reporter.addTest(method);
         browserManager
                 .startBrowser()
-                .navigateTo("https://www.javatpoint.com/");
+                .navigateTo("https://docs.oracle.com/");
     }
 
     @AfterMethod(alwaysRun = true)
-    public void afterTestMethod(Method method) {
+    public void afterTestMethod() {
         browserManager.closeBrowser();
     }
 
@@ -46,5 +47,10 @@ public abstract class BaseTest extends AbstractTestNGSpringContextTests {
     @AfterTest(alwaysRun = true)
     public void afterTest(ITestContext iTestListener) {
         LOGGER.info("End test " + iTestListener.getName());
+    }
+
+    @AfterSuite
+    public void afterSuit() {
+        reporter.generateReport();
     }
 }
