@@ -9,8 +9,9 @@ import com.aventstack.extentreports.model.Media;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import org.testng.annotations.Test;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public final class ExtentReportsService implements Reporter {
@@ -40,8 +41,8 @@ public final class ExtentReportsService implements Reporter {
     }
 
     private String getTestDescription(Method method) {
-        Annotation testAnnotation = method.getAnnotation(Test.class);
-        return ((Test) testAnnotation).description();
+        Test testAnnotation = method.getAnnotation(Test.class);
+        return testAnnotation.description();
     }
 
     @Override
@@ -66,6 +67,7 @@ public final class ExtentReportsService implements Reporter {
         private void addInfoToTest(ExtentTest extentTest, Method method) {
             Tracking annotation = getAnnotationIfPresent(method);
             addStory(extentTest, annotation);
+            addBugs(extentTest, annotation);
         }
 
         private Tracking getAnnotationIfPresent(Method method) {
@@ -79,6 +81,13 @@ public final class ExtentReportsService implements Reporter {
                 story = "Story wasn't defined";
             }
             extentTest.info(MarkupHelper.createLabel(story, ExtentColor.BLUE));
+        }
+
+        private void addBugs(ExtentTest extentTest, Tracking tracking) {
+            List<String> items = Arrays.asList(tracking.bugs());
+            if (!items.get(0).isEmpty()) {
+                extentTest.info(MarkupHelper.createOrderedList(items));
+            }
         }
     }
 }
