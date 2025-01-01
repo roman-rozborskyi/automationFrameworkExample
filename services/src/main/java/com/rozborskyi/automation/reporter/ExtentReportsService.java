@@ -6,12 +6,13 @@ import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.markuputils.ExtentColor;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import com.rozborskyi.automation.reporter.annotationprocessors.StepProcessor;
+import com.rozborskyi.automation.reporter.annotationprocessors.TrackingProcessor;
+import com.rozborskyi.automation.reporter.annotationprocessors.WaitForFixProcessor;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 public final class ExtentReportsService implements Reporter {
     private static ExtentReportsService extentReportsService;
@@ -35,7 +36,8 @@ public final class ExtentReportsService implements Reporter {
     public void addTest(Method method) {
         String description = getTestDescription(method);
         ExtentTest extentTest = REPORT.createTest(description);
-        new TrackingProcessor().addInfoToTest(extentTest, method);
+        addTrackingInfo(extentTest, method);
+
         TESTS.set(extentTest);
     }
 
@@ -44,76 +46,42 @@ public final class ExtentReportsService implements Reporter {
         return testAnnotation.description();
     }
 
+    private void addTrackingInfo(ExtentTest extentTest, Method method) {
+        TrackingProcessor trackingProcessor = new TrackingProcessor(method);
+        String story = trackingProcessor.getStory();
+        List<String> bugs = trackingProcessor.getBugs();
+        extentTest.info(MarkupHelper.createLabel(story, ExtentColor.BLUE));
+        if (trackingProcessor.isBugsPresent()) {
+            extentTest.info(MarkupHelper.createOrderedList(bugs));
+        }
+    }
+
     @Override
-    public void addSuccessStep(String stepDescription) {
+    public void addSuccessStep(Method method) {
         ExtentTest extentTest = TESTS.get();
+        String stepDescription = new StepProcessor(method).getStepDescription();
         extentTest.createNode(stepDescription).pass("pass");
     }
 
     @Override
-    public void addFailStep(String stepDescription, Throwable throwable) {
+    public void addFailStep(Method method, Throwable throwable) {
         ExtentTest extentTest = TESTS.get();
+        String stepDescription = new StepProcessor(method).getStepDescription();
         extentTest.createNode(stepDescription).fail(throwable, MediaEntityBuilder.createScreenCaptureFromPath(".").build());
     }
 
     @Override
-    public void markTestFailed(Throwable throwable) {
+    public void markTestFailed(Method method, Throwable throwable) {
         ExtentTest extentTest = TESTS.get();
-        extentTest.createNode(throwable.getMessage()).fail(throwable, MediaEntityBuilder.createScreenCaptureFromPath(".").build());
-        extentTest.fail(throwable.getMessage());
+        WaitForFixProcessor waitForFixProcessor = new WaitForFixProcessor(method);
+        if (!waitForFixProcessor.isAnnotationPresent()) {
+            extentTest.createNode(throwable.getMessage()).fail(throwable, MediaEntityBuilder.createScreenCaptureFromPath(".").build());
+            extentTest.fail(throwable.getMessage());
+        }
     }
 
     @Override
     public void generateReport() {
         REPORT.flush();
-    }
-
-    private class TrackingProcessor {
-        private void addInfoToTest(ExtentTest extentTest, Method method) {
-            Tracking annotation = getAnnotationIfPresent(method);
-            boolean isStoryPresent = addStory(extentTest, annotation);
-            boolean isBugsPresent = addBugs(extentTest, annotation);
-            if (isAnnotationIncorrect(isStoryPresent, isBugsPresent)) {
-                throw new RuntimeException(
-                        "Annotation @Tracking must have at least one value - either story or bug(s). " +
-                                "Test must have a reason of it's creation");
-            }
-        }
-
-        private boolean isAnnotationIncorrect(boolean isStoryPresent, boolean isBugsPresent) {
-            return !(isStoryPresent || isBugsPresent);
-        }
-
-        private Tracking getAnnotationIfPresent(Method method) {
-            return Optional.ofNullable(method.getAnnotation(Tracking.class))
-                    .orElseThrow(() -> new RuntimeException(String.format("Add \"@Tracking\" to the test %s", getTestDescription(method))));
-        }
-
-        private boolean addStory(ExtentTest extentTest, Tracking tracking) {
-            String story = tracking.story();
-            boolean isStoryPresent = true;
-
-            if (story == null || story.isEmpty()) {
-                story = "Story wasn't defined";
-                isStoryPresent = false;
-            }
-            extentTest.info(MarkupHelper.createLabel(story, ExtentColor.BLUE));
-
-            return isStoryPresent;
-        }
-
-        private boolean addBugs(ExtentTest extentTest, Tracking tracking) {
-            List<String> bugs = Arrays.asList(tracking.bugs());
-            if (isBugsPresent(bugs)) {
-                extentTest.info(MarkupHelper.createOrderedList(bugs));
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        private boolean isBugsPresent(List<String> bugs) {
-            return !bugs.get(0).isEmpty();
-        }
     }
 }
