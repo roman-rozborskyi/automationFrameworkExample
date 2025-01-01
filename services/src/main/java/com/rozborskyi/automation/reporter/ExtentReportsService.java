@@ -5,7 +5,6 @@ import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.markuputils.ExtentColor;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
-import com.aventstack.extentreports.model.Media;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import org.testng.annotations.Test;
 
@@ -54,8 +53,14 @@ public final class ExtentReportsService implements Reporter {
     @Override
     public void addFailStep(String stepDescription, Throwable throwable) {
         ExtentTest extentTest = TESTS.get();
-        Media screenshot = MediaEntityBuilder.createScreenCaptureFromPath("img.jpeg").build();
-        extentTest.createNode(stepDescription).fail(throwable, screenshot);
+        extentTest.createNode(stepDescription).fail(throwable, MediaEntityBuilder.createScreenCaptureFromPath(".").build());
+    }
+
+    @Override
+    public void markTestFailed(Throwable throwable) {
+        ExtentTest extentTest = TESTS.get();
+        extentTest.createNode(throwable.getMessage()).fail(throwable, MediaEntityBuilder.createScreenCaptureFromPath(".").build());
+        extentTest.fail(throwable.getMessage());
     }
 
     @Override
@@ -66,8 +71,17 @@ public final class ExtentReportsService implements Reporter {
     private class TrackingProcessor {
         private void addInfoToTest(ExtentTest extentTest, Method method) {
             Tracking annotation = getAnnotationIfPresent(method);
-            addStory(extentTest, annotation);
-            addBugs(extentTest, annotation);
+            boolean isStoryPresent = addStory(extentTest, annotation);
+            boolean isBugsPresent = addBugs(extentTest, annotation);
+            if (isAnnotationIncorrect(isStoryPresent, isBugsPresent)) {
+                throw new RuntimeException(
+                        "Annotation @Tracking must have at least one value - either story or bug(s). " +
+                                "Test must have a reason of it's creation");
+            }
+        }
+
+        private boolean isAnnotationIncorrect(boolean isStoryPresent, boolean isBugsPresent) {
+            return !(isStoryPresent || isBugsPresent);
         }
 
         private Tracking getAnnotationIfPresent(Method method) {
@@ -75,19 +89,31 @@ public final class ExtentReportsService implements Reporter {
                     .orElseThrow(() -> new RuntimeException(String.format("Add \"@Tracking\" to the test %s", getTestDescription(method))));
         }
 
-        private void addStory(ExtentTest extentTest, Tracking tracking) {
+        private boolean addStory(ExtentTest extentTest, Tracking tracking) {
             String story = tracking.story();
+            boolean isStoryPresent = true;
+
             if (story == null || story.isEmpty()) {
                 story = "Story wasn't defined";
+                isStoryPresent = false;
             }
             extentTest.info(MarkupHelper.createLabel(story, ExtentColor.BLUE));
+
+            return isStoryPresent;
         }
 
-        private void addBugs(ExtentTest extentTest, Tracking tracking) {
-            List<String> items = Arrays.asList(tracking.bugs());
-            if (!items.get(0).isEmpty()) {
-                extentTest.info(MarkupHelper.createOrderedList(items));
+        private boolean addBugs(ExtentTest extentTest, Tracking tracking) {
+            List<String> bugs = Arrays.asList(tracking.bugs());
+            if (isBugsPresent(bugs)) {
+                extentTest.info(MarkupHelper.createOrderedList(bugs));
+                return true;
+            } else {
+                return false;
             }
+        }
+
+        private boolean isBugsPresent(List<String> bugs) {
+            return !bugs.get(0).isEmpty();
         }
     }
 }

@@ -13,24 +13,35 @@ import org.aspectj.lang.reflect.MethodSignature;
 import java.lang.reflect.Method;
 
 @Aspect
-public class ReporterAspect {
+public class AspectManager {
 
-    @AfterReturning("definePointcut()")
-    public void defineAdviceSuccess(JoinPoint joinPoint) {
+    @AfterReturning("defineStepPointcut()")
+    public void defineAdviceStepSuccess(JoinPoint joinPoint) {
         String description = getStepDescription(joinPoint);
         Reporter reporter = ExtentReportsService.getInstance();
         reporter.addSuccessStep(description);
     }
 
-    @AfterThrowing(pointcut = "definePointcut()", throwing = "throwable")
-    public void defineAdviceFail(JoinPoint joinPoint, Throwable throwable) {
+    @AfterThrowing(pointcut = "defineStepPointcut()", throwing = "throwable")
+    public void defineAdviceStepFail(JoinPoint joinPoint, Throwable throwable) {
         String description = getStepDescription(joinPoint);
         Reporter reporter = ExtentReportsService.getInstance();
         reporter.addFailStep(description, throwable);
     }
 
     @Pointcut("@annotation(com.rozborskyi.automation.reporter.Step) && execution(* *(..))")
-    public void definePointcut() {
+    public void defineStepPointcut() {
+
+    }
+
+    @AfterThrowing(pointcut = "defineTestPointcut()", throwing = "throwable")
+    public void defineAdviceFailTest(JoinPoint joinPoint, Throwable throwable) {
+        Reporter reporter = ExtentReportsService.getInstance();
+        reporter.markTestFailed(throwable);
+    }
+
+    @Pointcut("@annotation(org.testng.annotations.Test) && execution(* *(..))")
+    public void defineTestPointcut() {
 
     }
 

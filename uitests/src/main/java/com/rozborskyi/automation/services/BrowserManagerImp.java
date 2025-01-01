@@ -19,7 +19,10 @@ public class BrowserManagerImp implements BrowserManager {
 
     public BrowserManagerImp closeBrowser() {
         LOGGER.info("Close browser");
-        webDriver.quit();
+        if (webDriver != null) {
+            webDriver.quit();
+        }
+
         return this;
     }
 

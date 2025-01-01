@@ -9,5 +9,7 @@ public interface Reporter {
 
     void addFailStep(String stepDescription, Throwable throwable);
 
+    void markTestFailed(Throwable throwable);
+
     void generateReport();
 }
