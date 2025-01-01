@@ -46,3 +46,13 @@ Both parameters are interdependent; for instance, an error will occur if the UI 
 ### Reporting
 
 Reports are generated using ExtentReports and AspectJ, ensuring detailed insights into the test execution process.
+Each test method must be annotated with @Tracking.
+The @Tracking annotation includes two attributes: story and bugs. At least one of these attributes must be specified.
+All bugs identified by the test should be added to the bugs list. This ensures that duplicates of existing tickets are
+avoided.
+The values in the bugs list should be retained permanently and must not be removed, even after the bugs are fixed.\
+If a test fails due to a bug, the test should also be annotated with @WaitForFix. The annotation should include either
+the ticket ID or a link to the ticket.
+This marks the test as temporarily successful until the bug is resolved.
+Once the bug is fixed, the test will stop failing. The framework will then display a message indicating that the
+@WaitForFix annotation should be removed.
