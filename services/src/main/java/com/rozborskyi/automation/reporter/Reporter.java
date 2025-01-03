@@ -5,11 +5,13 @@ import java.lang.reflect.Method;
 public interface Reporter {
     void addTest(Method method);
 
-    void addSuccessStep(Method method);
+    void addWorkingStep(Method method);
 
-    void addFailStep(Method method, Throwable throwable);
+    void addBrokenStep(Method method, Throwable throwable);
 
-    void markTestFailed(Method method, Throwable throwable);
+    void markBrokenTest(Method method, Throwable throwable);
+
+    void markWorkingTest(Method method);
 
     void generateReport();
 }

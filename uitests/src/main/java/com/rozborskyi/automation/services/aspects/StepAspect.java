@@ -18,14 +18,14 @@ public class StepAspect {
     public void defineAdviceSuccess(JoinPoint joinPoint) {
         Method method = getMethod(joinPoint);
         Reporter reporter = ExtentReportsService.getInstance();
-        reporter.addSuccessStep(method);
+        reporter.addWorkingStep(method);
     }
 
     @AfterThrowing(pointcut = "definePointcut()", throwing = "throwable")
     public void defineAdviceFail(JoinPoint joinPoint, Throwable throwable) {
         Method method = getMethod(joinPoint);
         Reporter reporter = ExtentReportsService.getInstance();
-        reporter.addFailStep(method, throwable);
+        reporter.addBrokenStep(method, throwable);
     }
 
     @Pointcut("@annotation(com.rozborskyi.automation.reporter.Step) && execution(* *(..))")

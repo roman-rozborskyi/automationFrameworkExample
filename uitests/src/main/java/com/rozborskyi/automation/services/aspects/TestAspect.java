@@ -3,6 +3,7 @@ package com.rozborskyi.automation.services.aspects;
 import com.rozborskyi.automation.reporter.ExtentReportsService;
 import com.rozborskyi.automation.reporter.Reporter;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -17,7 +18,14 @@ public class TestAspect {
     public void defineAdvice(JoinPoint joinPoint, Throwable throwable) {
         Reporter reporter = ExtentReportsService.getInstance();
         Method method = getMethod(joinPoint);
-        reporter.markTestFailed(method, throwable);
+        reporter.markBrokenTest(method, throwable);
+    }
+
+    @AfterReturning(pointcut = "definePointcut()")
+    public void defineAdvice(JoinPoint joinPoint) {
+        Reporter reporter = ExtentReportsService.getInstance();
+        Method method = getMethod(joinPoint);
+        reporter.markWorkingTest(method);
     }
 
     @Pointcut("@annotation(org.testng.annotations.Test) && execution(* *(..))")
